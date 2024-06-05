@@ -9,17 +9,15 @@ namespace GitHubAPIConsumer.Menus.User
             if (id == 1)
             {
                 AppState.MenuType = Type.SetRepositoryId;
-                return Task.FromResult(true);
             }
             if (id == 2)
             {
                 AppState.MenuType = Type.SetUserId;
-                return Task.FromResult(true);
             }
-            return Task.FromResult(false);
+            return Task.FromResult(id is 1 or 2);
         }
 
-        public override void Print()
+        public override Task Print()
         {
             var userInfo = ResponseState.UserInfo;
 
@@ -32,6 +30,8 @@ namespace GitHubAPIConsumer.Menus.User
             Console.WriteLine();
             Console.WriteLine("1. Ver informações de um repositório desse usuário.");
             Console.WriteLine("2. Escolher outro usuário.");
+
+            return Task.CompletedTask;
         }
     }
 }

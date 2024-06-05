@@ -19,15 +19,17 @@ namespace GitHubAPIConsumer.Menus.User
                 ResponseState.UserInfo = new(userId);
                 await ResponseState.UserInfo.Update();
             }
+
             AppState.UserId = userId;
             AppState.MenuType = Type.UserInfo;
 
             return true;
         }
 
-        public override void Print()
+        public override Task Print()
         {
             Console.WriteLine("Digite o @ do usuário.");
+            return Task.CompletedTask;
         }
     }
 }

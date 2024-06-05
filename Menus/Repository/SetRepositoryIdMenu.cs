@@ -13,7 +13,7 @@ namespace GitHubAPIConsumer.Menus.Repository
             if (!ResponseState.RepositoryInfo.IsValid)
             {
                 Console.Clear();
-                Console.WriteLine($"Esse repositório não existe ou não pertence ao usuário \"{AppState.UserId}\".");
+                Console.WriteLine($"Esse repositório não existe, não pertence ao usuário \"{AppState.UserId}\", ou você não tem permissão para vê-lo.");
                 Console.ReadKey();
                 AppState.MenuType = Type.UserInfo;
                 return false;
@@ -25,9 +25,10 @@ namespace GitHubAPIConsumer.Menus.Repository
             return true;
         }
 
-        public override void Print()
+        public override Task Print()
         {
             Console.WriteLine($"Digite o @ do repositório do usúario \"{AppState.UserId}\".");
+            return Task.CompletedTask;
         }
     }
 }
