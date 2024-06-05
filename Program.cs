@@ -12,42 +12,39 @@ namespace GitHubAPIConsumer
         private readonly static UserInfoMenu _userInfoMenu = new();
         private readonly static RepositoryInfoMenu _repositoryInfoMenu = new();
 
-        async static Task Main(string[] args)
+        async static Task Main()
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+
             while (!AppState.CloseApp)
             {
-                if (AppState.MenuType == Menu.Type.SetUserId)
-                {
-                    Console.Clear();
-                    _setUserIdMenu.Print();
-                    await _setUserIdMenu.ExecuteCommand(0);
-                    continue;
-                }
-                if (AppState.MenuType == Menu.Type.SetRepositoryId)
-                {
-                    Console.Clear();
-                    _setRepositoryIdMenu.Print();
-                    await _setRepositoryIdMenu.ExecuteCommand(0);
-                    continue;
-                }
                 PrintMenu();
-                var isValidOption = int.TryParse(Console.ReadLine(), out int value);
-                while (!isValidOption)
+                int value = 0;
+                if (AppState.MenuType is not Menu.Type.SetUserId and not Menu.Type.SetRepositoryId)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Digite um número inteiro!");
-                    isValidOption = int.TryParse(Console.ReadLine(), out value);
+                    var isValidOption = int.TryParse(Console.ReadLine(), out value);
+                    while (!isValidOption)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Digite um número inteiro!");
+                        isValidOption = int.TryParse(Console.ReadLine(), out value);
+                    }
                 }
-                PerformMenu(value);
+                await PerformMenu(value);
             }
         }
 
         private static void PrintMenu()
         {
-            var menuType = AppState.MenuType;
             Console.Clear();
-            switch (menuType)
+            switch (AppState.MenuType)
             {
+                case Menu.Type.SetUserId:
+                    _setUserIdMenu.Print();
+                    break;
+                case Menu.Type.SetRepositoryId:
+                    _setRepositoryIdMenu.Print();
+                    break;
                 case Menu.Type.UserInfo:
                     _userInfoMenu.Print();
                     break;
@@ -60,21 +57,21 @@ namespace GitHubAPIConsumer
             }
         }
 
-        private async static void PerformMenu(int id)
+        private static Task PerformMenu(int id)
         {
-            var menuType = AppState.MenuType;
-            switch (menuType)
+            switch (AppState.MenuType)
             {
+                case Menu.Type.SetUserId:
+                    return _setUserIdMenu.ExecuteCommand(id);
+                case Menu.Type.SetRepositoryId:
+                    return _setRepositoryIdMenu.ExecuteCommand(id);
                 case Menu.Type.UserInfo:
-                    await _userInfoMenu.ExecuteCommand(id);
-                    break;
+                    return _userInfoMenu.ExecuteCommand(id);
                 case Menu.Type.RepositoryInfo:
-                    await _repositoryInfoMenu.ExecuteCommand(id);
-                    break;
-                default:
-                    AppState.CloseApp = true;
-                    break;
+                    return _repositoryInfoMenu.ExecuteCommand(id);
             }
+            AppState.CloseApp = true;
+            return Task.CompletedTask;
         }
     }
 }
