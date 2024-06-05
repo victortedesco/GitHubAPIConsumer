@@ -3,7 +3,7 @@
     internal abstract class Menu
     {
         public abstract void Print();
-        public abstract void ExecuteCommand(int id);
+        public abstract Task<bool> ExecuteCommand(int id);
 
         public enum Type : ushort
         {

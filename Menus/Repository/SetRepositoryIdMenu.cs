@@ -4,19 +4,25 @@ namespace GitHubAPIConsumer.Menus.Repository
 {
     internal class SetRepositoryIdMenu : Menu
     {
-        public async override void ExecuteCommand(int id)
+        public async override Task<bool> ExecuteCommand(int id)
         {
-            string userId = Console.ReadLine();
+            var repositoryId = Console.ReadLine();
+            ResponseState.RepositoryInfo = new(repositoryId);
+            await ResponseState.RepositoryInfo.Update();
 
-            while (!ResponseState.UserInfo.IsValid)
+            if (!ResponseState.RepositoryInfo.IsValid)
             {
                 Console.Clear();
                 Console.WriteLine($"Esse repositório não existe ou não pertence ao usuário {AppState.UserId}!");
-                userId = Console.ReadLine();
-                await ResponseState.UserInfo.Update();
+                Console.ReadKey();
+                AppState.MenuType = Type.UserInfo;
+                return false;
             }
-            AppState.UserId = userId;
+
+            AppState.RepositoryId = repositoryId;
             AppState.MenuType = Type.RepositoryInfo;
+
+            return true;
         }
 
         public override void Print()

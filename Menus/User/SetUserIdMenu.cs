@@ -4,19 +4,25 @@ namespace GitHubAPIConsumer.Menus.User
 {
     internal class SetUserIdMenu : Menu
     {
-        public async override void ExecuteCommand(int id)
+        public async override Task<bool> ExecuteCommand(int id)
         {
-            string userId = Console.ReadLine();
+            var userId = Console.ReadLine();
+            ResponseState.UserInfo = new(userId);
+            await ResponseState.UserInfo.Update();
 
             while (!ResponseState.UserInfo.IsValid)
             {
                 Console.Clear();
-                Console.WriteLine("Esse @ de usuário não existe!");
+                Console.WriteLine("Esse @ desse usuário não existe!");
+                Console.WriteLine("Digite um usuário válido.");
                 userId = Console.ReadLine();
+                ResponseState.UserInfo = new(userId);
                 await ResponseState.UserInfo.Update();
             }
             AppState.UserId = userId;
             AppState.MenuType = Type.UserInfo;
+
+            return true;
         }
 
         public override void Print()

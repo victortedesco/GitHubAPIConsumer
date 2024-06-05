@@ -1,40 +1,51 @@
-﻿using GitHubAPIConsumer.App;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
 
 namespace GitHubAPIConsumer.Api
 {
     public class UserInfo
     {
-        private readonly HttpClient _httpClient = new()
-        {
-            BaseAddress = new Uri("https://api.instagram.com/v1/users/"),
-        };
+        private readonly HttpClient _httpClient;
 
-        public bool IsValid { get; set; } = false;
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public uint FollowerCount { get; set; }
-        public uint FollowingCount { get; set; }
+        public bool IsValid { get; private set; } = false;
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public uint FollowerCount { get; private set; }
+        public uint FollowingCount { get; private set; }
+
+        public UserInfo(string userId)
+        {
+            _httpClient = new()
+            {
+                BaseAddress = new Uri($"https://api.github.com/users/{userId}"),
+            };
+        }
 
         public async Task Update()
         {
-            using HttpResponseMessage response = await _httpClient.GetAsync(AppState.UserId);
-            if (response is null)
+            var httpRequest = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get
+            };
+            httpRequest.Headers.Add("User-Agent", "mozilla");
+            httpRequest.Headers.Add("Accept", "application/vnd.github+json");
+            var httpResponseMessage = await _httpClient.SendAsync(httpRequest);
+
+            if (httpResponseMessage is null)
             {
                 return;
             }
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            if (httpResponseMessage.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 return;
             }
 
-            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var jsonResponse = await httpResponseMessage.Content.ReadAsStringAsync();
             var data = JsonObject.Parse(jsonResponse);
 
-           Name = data["data.full_name"].ToString();
-            Description = data["data.description"].ToString();
-            FollowerCount = uint.Parse(data["data.counts.followed_by"].ToString());
-            FollowingCount = uint.Parse(data["data.counts.follows"].ToString());
+            Name = data["name"] != null ? data["name"].ToString() : data["login"].ToString();
+            Description = data["bio"] != null ? data["bio"].ToString() : "???";
+            FollowerCount = uint.Parse(data["followers"].ToString());
+            FollowingCount = uint.Parse(data["following"].ToString());
             IsValid = true;
         }
     }

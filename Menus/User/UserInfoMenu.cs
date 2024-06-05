@@ -1,29 +1,27 @@
-﻿using GitHubAPIConsumer.Api;
-using GitHubAPIConsumer.App;
+﻿using GitHubAPIConsumer.App;
 
 namespace GitHubAPIConsumer.Menus.User
 {
     internal class UserInfoMenu : Menu
     {
-        public override void ExecuteCommand(int id)
+        public override Task<bool> ExecuteCommand(int id)
         {
-            switch (id)
+            if (id == 1)
             {
-                case 0:
-                    AppState.MenuType = Type.SetUserId;
-                    break;
-                case 1:
-                    AppState.MenuType = Type.UserInfo;
-                    break;
-                case 2:
-                    AppState.MenuType = Type.SetRepositoryId;
-                    break;
+                AppState.MenuType = Type.SetRepositoryId;
+                return Task.FromResult(true);
             }
+            if (id == 2)
+            {
+                AppState.MenuType = Type.SetUserId;
+                return Task.FromResult(true);
+            }
+            return Task.FromResult(false);
         }
 
         public override void Print()
         {
-            UserInfo userInfo = ResponseState.UserInfo;
+            var userInfo = ResponseState.UserInfo;
 
             Console.WriteLine($"Usuário: {AppState.UserId}");
             Console.WriteLine();
@@ -32,7 +30,8 @@ namespace GitHubAPIConsumer.Menus.User
             Console.WriteLine($"Quantidade de seguidores: {userInfo.FollowerCount}");
             Console.WriteLine($"Quantidade de usuário seguidos: {userInfo.FollowingCount}");
             Console.WriteLine();
-            Console.WriteLine("1. Escolher outro usuário.");
+            Console.WriteLine("1. Ver informações de um repositório desse usuário.");
+            Console.WriteLine("2. Escolher outro usuário.");
         }
     }
 }
