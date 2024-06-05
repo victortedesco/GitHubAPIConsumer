@@ -13,7 +13,7 @@ namespace GitHubAPIConsumer.Menus.User
             while (!ResponseState.UserInfo.IsValid)
             {
                 Console.Clear();
-                Console.WriteLine("Esse @ desse usuário não existe!");
+                Console.WriteLine("Esse usuário não existe!");
                 Console.WriteLine("Digite um usuário válido.");
                 userId = Console.ReadLine();
                 ResponseState.UserInfo = new(userId);
