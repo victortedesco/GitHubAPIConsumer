@@ -1,6 +1,6 @@
 ﻿namespace GitHubAPIConsumer.Menus
 {
-    internal abstract class Menu
+    public abstract class Menu
     {
         public abstract void Print();
         public abstract Task<bool> ExecuteCommand(int id);

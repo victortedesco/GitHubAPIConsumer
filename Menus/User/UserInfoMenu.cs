@@ -2,7 +2,7 @@
 
 namespace GitHubAPIConsumer.Menus.User
 {
-    internal class UserInfoMenu : Menu
+    public class UserInfoMenu : Menu
     {
         public override Task<bool> ExecuteCommand(int id)
         {
@@ -23,7 +23,7 @@ namespace GitHubAPIConsumer.Menus.User
         {
             var userInfo = ResponseState.UserInfo;
 
-            Console.WriteLine($"Usuário: {AppState.UserId}");
+            Console.WriteLine($"Usuário: https://github.com/{AppState.UserId}");
             Console.WriteLine();
             Console.WriteLine($"Nome: {userInfo.Name}");
             Console.WriteLine($"Descrição: {userInfo.Description}");

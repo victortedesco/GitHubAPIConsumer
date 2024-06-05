@@ -2,7 +2,7 @@
 
 namespace GitHubAPIConsumer.Menus.User
 {
-    internal class SetUserIdMenu : Menu
+    public class SetUserIdMenu : Menu
     {
         public async override Task<bool> ExecuteCommand(int id)
         {

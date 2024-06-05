@@ -2,7 +2,7 @@
 
 namespace GitHubAPIConsumer.Menus.Repository
 {
-    internal class SetRepositoryIdMenu : Menu
+    public class SetRepositoryIdMenu : Menu
     {
         public async override Task<bool> ExecuteCommand(int id)
         {
@@ -13,7 +13,7 @@ namespace GitHubAPIConsumer.Menus.Repository
             if (!ResponseState.RepositoryInfo.IsValid)
             {
                 Console.Clear();
-                Console.WriteLine($"Esse repositório não existe ou não pertence ao usuário {AppState.UserId}!");
+                Console.WriteLine($"Esse repositório não existe ou não pertence ao usuário \"{AppState.UserId}\".");
                 Console.ReadKey();
                 AppState.MenuType = Type.UserInfo;
                 return false;
@@ -27,7 +27,7 @@ namespace GitHubAPIConsumer.Menus.Repository
 
         public override void Print()
         {
-            Console.WriteLine($"Digite o ID do repositório do usúario {AppState.UserId}.");
+            Console.WriteLine($"Digite o @ do repositório do usúario \"{AppState.UserId}\".");
         }
     }
 }
