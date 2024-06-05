@@ -5,10 +5,7 @@ namespace GitHubAPIConsumer.Api
 {
     public class RepositoryInfo
     {
-        private HttpClient _httpClient = new()
-        {
-            BaseAddress = new Uri("https://api.instagram.com/v1/users/"),
-        };
+        private readonly HttpClient _httpClient;
 
         public bool IsValid { get; set; } = false;
         public string Name { get; set; }
