@@ -2,7 +2,7 @@
 
 namespace GitHubAPIConsumer.App
 {
-    internal class ResponseState
+    public class ResponseState
     {
         public static UserInfo UserInfo { get; set; }
         public static RepositoryInfo RepositoryInfo { get; set; }
