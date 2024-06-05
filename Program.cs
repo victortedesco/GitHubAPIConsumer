@@ -16,9 +16,16 @@ namespace GitHubAPIConsumer
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            while (!AppState.CloseApp)
+            Console.CancelKeyPress += delegate (object sender, ConsoleCancelEventArgs e)
             {
-                PrintMenu();
+                Console.Clear();
+                Environment.Exit(0);
+            };
+
+            while (true)
+            {
+                Console.Clear();
+                await PrintMenu();
                 int value = 0;
                 if (AppState.MenuType is not Menu.Type.SetUserId and not Menu.Type.SetRepositoryId)
                 {
@@ -26,52 +33,37 @@ namespace GitHubAPIConsumer
                     while (!isValidOption)
                     {
                         Console.Clear();
+                        await PrintMenu();
                         Console.WriteLine("Digite um número inteiro!");
                         isValidOption = int.TryParse(Console.ReadLine(), out value);
                     }
                 }
-                await PerformMenu(value);
+                await ExecuteMenu(value);
             }
         }
 
-        private static void PrintMenu()
+        private static Task PrintMenu()
         {
-            Console.Clear();
-            switch (AppState.MenuType)
+            return AppState.MenuType switch
             {
-                case Menu.Type.SetUserId:
-                    _setUserIdMenu.Print();
-                    break;
-                case Menu.Type.SetRepositoryId:
-                    _setRepositoryIdMenu.Print();
-                    break;
-                case Menu.Type.UserInfo:
-                    _userInfoMenu.Print();
-                    break;
-                case Menu.Type.RepositoryInfo:
-                    _repositoryInfoMenu.Print();
-                    break;
-                default:
-                    AppState.CloseApp = true;
-                    break;
-            }
+                Menu.Type.SetUserId => _setUserIdMenu.Print(),
+                Menu.Type.SetRepositoryId => _setRepositoryIdMenu.Print(),
+                Menu.Type.UserInfo => _userInfoMenu.Print(),
+                Menu.Type.RepositoryInfo => _repositoryInfoMenu.Print(),
+                _ => Task.FromException(new ArgumentOutOfRangeException(null, nameof(AppState.MenuType)))
+            };
         }
 
-        private static Task PerformMenu(int id)
+        private static Task ExecuteMenu(int id)
         {
-            switch (AppState.MenuType)
+            return AppState.MenuType switch
             {
-                case Menu.Type.SetUserId:
-                    return _setUserIdMenu.ExecuteCommand(id);
-                case Menu.Type.SetRepositoryId:
-                    return _setRepositoryIdMenu.ExecuteCommand(id);
-                case Menu.Type.UserInfo:
-                    return _userInfoMenu.ExecuteCommand(id);
-                case Menu.Type.RepositoryInfo:
-                    return _repositoryInfoMenu.ExecuteCommand(id);
-            }
-            AppState.CloseApp = true;
-            return Task.CompletedTask;
+                Menu.Type.SetUserId => _setUserIdMenu.ExecuteCommand(id),
+                Menu.Type.SetRepositoryId => _setRepositoryIdMenu.ExecuteCommand(id),
+                Menu.Type.UserInfo => _userInfoMenu.ExecuteCommand(id),
+                Menu.Type.RepositoryInfo => _repositoryInfoMenu.ExecuteCommand(id),
+                _ => Task.FromException(new ArgumentOutOfRangeException(null, nameof(AppState.MenuType)))
+            };
         }
     }
 }
