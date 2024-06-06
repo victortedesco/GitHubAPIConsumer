@@ -1,8 +1,8 @@
-# GitHubAPIConsumer
-Esse projeto È uma aplicaÁ„o para console usando .NET
+Ôªø# GitHubAPIConsumer
+Esse projeto √© uma aplica√ß√£o para console usando .NET
 ## Como executar
-Clone esse repositÛrio e use o comando `dotnet run` com o .NET 8 ou superior.
-## Sugestıes para o futuro
-* AutomaÁ„o para buildar para Windows, MacOS e Linux e publicar o arquivo.
-* Implementar algum tipo de autentiÁaÁ„o para verificar repositÛrios privados.
-* Fazer um relatÛrio completo sobre um usu·rio ou sobre um repositÛrio em um arquivo .txt
+Clone esse reposit√≥rio e use o comando `dotnet run` com o .NET 8 ou superior.
+## Sugest√µes para o futuro
+* Automa√ß√£o para buildar para Windows, MacOS e Linux e publicar o arquivo.
+* Implementar algum tipo de autenti√ßa√ß√£o para verificar reposit√≥rios privados.
+* Fazer um relat√≥rio completo sobre um usu√°rio ou sobre um reposit√≥rio em um arquivo .txt

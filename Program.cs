@@ -18,6 +18,7 @@ namespace GitHubAPIConsumer
 
             Console.CancelKeyPress += delegate (object sender, ConsoleCancelEventArgs e)
             {
+                e.Cancel = true;
                 Console.Clear();
                 Environment.Exit(0);
             };
